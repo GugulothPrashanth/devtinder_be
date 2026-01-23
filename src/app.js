@@ -1,21 +1,78 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
   try {
+    validateSignUpData(req);
+
+    const { firstName, lastName, emailId, password } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log(passwordHash);
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
+
     await user.save();
     res.send("User Added Successfully!");
   } catch (error) {
-    res.status(400).send("Error Saving the User!" + error.message);
+    res.status(400).send("ERROR : " + error.message);
   }
 });
 
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+
+    if (!user) {
+      throw new Error("Invalid Credentials!");
+    }
+
+    const isPasswordValid = await user.validatePassword(password);
+
+    if (isPasswordValid) {
+      const token = await user.getJWT();
+
+      res.cookie("token", token);
+      res.send("Login Successfully!");
+    } else {
+      throw new Error("Invalid Credentials!");
+    }
+  } catch (error) {
+    res.status(400).send("ERROR : " + error.message);
+  }
+});
+
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    res.send(user);
+  } catch (error) {
+    res.status(400).send("ERROR :" + error.message);
+  }
+});
+
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  const user = req.user;
+  res.send(user.firstName + " Connection Request Sent!");
+});
+
+// get user by email
 app.get("/user", async (req, res) => {
   const userEmail = req.body.emailId;
   try {
@@ -26,6 +83,7 @@ app.get("/user", async (req, res) => {
   }
 });
 
+// Feed Api - GET /feed - get all the users from database
 app.get("/feed", async (req, res) => {
   try {
     const users = await User.find({});
@@ -35,6 +93,7 @@ app.get("/feed", async (req, res) => {
   }
 });
 
+// Delete a user From Database
 app.delete("/user", async (req, res) => {
   const userId = req.body.userId;
 
@@ -46,6 +105,7 @@ app.delete("/user", async (req, res) => {
   }
 });
 
+//update data of the user
 app.patch("/user/:userId", async (req, res) => {
   const userId = req.body.userId;
   const data = req.body;
