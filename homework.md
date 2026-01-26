@@ -1,0 +1,96 @@
+- Create a repository
+- Initialize the repository
+- node_modules, package.json, package-lock.json
+- Install Express
+- Create a Server
+- Listen to port 7777
+- Write request handlers for /test , /hello
+- What are dependencies
+- What is the use of "-g" while npm install
+- Difference between caret and tilde (^ vs ~)
+
+- initialize git
+- .gitignore
+- Create a remote repo on github
+- push all the code to remote origin
+- play with routes and route extensions ex. /hello , / , /hello/2, /xyz
+- Order of the routes matter a lot
+- Install Postman app and make a workspace/collection > test API call
+- Write logic to handle GET, POST, PATCH, DELETE API calls and Test them on Postman
+- Explore routing and use of ? , + , () , \* in the routes
+- Use of regex in routes /a/ , /.\*fly$/
+- Reading the query params in the routes
+- Reading the Dynamic routes
+
+- Multiple Route Handlers - Play with the code
+- next()
+- next function and errors along with res.send()
+- app.use("/route", rH, [rH2, rH3], rH4, rH5)
+- What is a Middleware? Why do we need it?
+- How Express Js basically handles requests behind the scenes
+- Difference app.use and app.all
+- Write a dummy auth middleware for admin
+- Write a dummy auth middleware for all user routes, except /user/login
+- Error Handling Using app.use("/", (err, req, res, next) = {})
+
+- Create a free cluster on MongoDB Official website (Mongo Atlas)
+- Install mongoose library
+- Connect your application to the Database "Connection-url"/devTinder
+- Call the connectDB function and connect to database before starting application on 7777
+- Create a UserSchema & User Model
+- Create POST /signup API to add data to database
+- Push some documents using API calls from postman
+- Error Handling Using try , catch
+
+- JS Object vs JSON (difference)
+- Add the express.json() middleware to your app
+- Make your signup API dynamic to receive data from the end user
+- User.findOne with duplicate email ids, whitch object returned
+- API - Get user by email
+- API - Feed API - GET /feed - get all the users from the database
+- API - Get user by ID
+- Create a delete User API
+- Difference between PATCH and PUT
+- API - Update a user
+- Explore the Mongoose Documentation for Model methods
+- What are options in a Model.findOneAndDelete method, explore more about it
+- API - Update the user with email ID
+
+- Explore Schematype options from the documentation
+- add required, unique, lowercase, minLength, maxLength, trim...
+- add default
+- Create a custom validation function for gender
+- Improve the DB Schema - PUT all appropriate validations on each field in Schema.
+- Add timestamps to the userSchema
+- Add API level Validation on Patch request & signup post api
+- DATA sanitizing - Add API validation for each field
+- Install Validator
+- Explore Validator library function and Use validator function for emailId and Password, photoUrl
+- Never Trust req.body
+
+- validate data in Signup API
+- Install bcrypt package
+- create passwordHash using bcrypt.hash & save the user in encrypted password
+- create login api
+- Compare passwords and throw errors if email or password is invalid
+
+- install cookie-parser
+- just send a dummy cookie to user
+- create GET /profile API and check if you get the cookie back
+- install jsonwebtoken (jwt)
+- in login API, after email and password validation, create a JWT token and send it to user in cookies
+- read the cookies inside your profile API and find the logged in user
+- userAuth Middleware
+- add the userAuth middleware to profile API and a new sendConnectionRequest API
+- set the expiry of JWT token and cookies to 7 days
+- Create userSchema method to getJWT()
+- create userSchema method to comparePassword(passwordInputByUser)
+
+- Explore tinder APIs
+- Create a list of all APIs you can think of in Dev Tinder
+- Group multiple routes under respective routers
+- Read Documentation for express.Router
+- Create routes folder for managing auth, profile, request routes
+- Create authRouter, profileRouter, requestRouter
+- import these routes in app.js
+
